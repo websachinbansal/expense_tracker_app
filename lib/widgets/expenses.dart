@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_expense_trackerapp/widgets/chart/chart.dart';
 // import 'package:flutter/widgets.dart';
 
@@ -31,6 +32,7 @@ class _ExpenseState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(
@@ -69,6 +71,7 @@ class _ExpenseState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     Widget mainContent = const Center(
       child: Text('No expense found, Start adding some'),
     );
@@ -85,11 +88,13 @@ class _ExpenseState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
+      body: width<600 ? Column(
         children:
             //toolbar with the add button
             [Chart(expenses: _registerExpense), Expanded(child: mainContent)],
-      ),
+      ): Row(children: [
+         Expanded(child: Chart(expenses: _registerExpense)), Expanded(child: mainContent),
+      ],),
     );
   }
 }
